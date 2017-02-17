@@ -19,17 +19,18 @@ body{
 	max-width: 64rem;
 }
 
-.nav-bar {
+.navbar {
 	position: relative;
 	padding: 0.5rem;
 	background-color: rgba(101,18,95,0.5);
 	z-index: 1;
 }
 
-.nav-bar .logo{
+.navbar .logo{
 	position: relative;
 	left: 2rem;
 	cursor: pointer;
+	display: inline-block;
 }
 
 .navbar .links-container{
@@ -37,7 +38,7 @@ body{
 	position: absolute;
 	top: 0;
 	right: 0;
-	height: 100%;
+	height: 100px;
 	color: white;
 	text-decoration: none;
 }
