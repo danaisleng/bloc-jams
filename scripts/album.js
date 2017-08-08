@@ -1,5 +1,5 @@
 var albumArt = document.getElementById('albumCover'),
-    i = 0;
+    songListContainer = document.getElementsByClassName('album-view-song-list')[0];
 
 var albumPicasso = {
     title: 'The Colors',
@@ -52,7 +52,7 @@ var albumHoundmouth = {
     ]
 };
 
-var albumArray = [albumPicasso, albumMarconi, albumHoundmouth];
+var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 
 function createSongRow(songNumber, songName, songLength) {
      var template =
@@ -88,14 +88,24 @@ function setCurrentAlbum(album) {
         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
     }
 };
+
  
 window.onload = function() {
     setCurrentAlbum(albumHoundmouth);
+
+    songListContainer.addEventListener('mouseover', function(event) {
+         // #1
+         console.log(event.target);
+    });
+
+    // Create array for albums
+    var albumArray = [albumPicasso, albumMarconi, albumHoundmouth],
+        index = 0;
+
+    // Click through albums
+    albumArt.addEventListener('click', function(){
+        index = index + 1;
+        index = index % albumArray.length;
+        setCurrentAlbum(albumArray[index]);
+    });
 };
-
-
-albumArt.addEventListener('click', function(){
-    i = i + 1;
-    i = i % albumArray.length;
-    setCurrentAlbum(albumArray[i]);
-});
