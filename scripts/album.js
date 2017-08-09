@@ -90,7 +90,6 @@ function setCurrentAlbum(album) {
     }
 };
 
- 
 window.onload = function() {
     setCurrentAlbum(albumHoundmouth);
 
