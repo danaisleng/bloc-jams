@@ -95,15 +95,20 @@ function setCurrentAlbum(album) {
 };
 
 function findParentByClassName(element, targetClass){
-    if (element) {
-        var currentParent = element.parentElement;
-
-        while(currentParent.className !== targetClass && currentParent.className !== null){
+    var currentParent = element.parentElement;
+    if (currentParent) {
+        while (currentParent.className && currentParent.className != targetClass) {
             currentParent = currentParent.parentElement;
-        }
+        }  
 
-        return currentParent;
-    }
+        if (currentParent.className == targetClass) {
+            return currentParent;
+        } else {
+            console.log('No parent found with that class name.');
+        };
+    } else {
+        console.log('No parent found.');
+    };
 };
 
 function getSongItem(element){
@@ -152,7 +157,6 @@ window.onload = function() {
             var songItemNumber = songItem.getAttribute('data-song-number');
 
             if (songItemNumber !== currentlyPlayingSong) {
-                console.log('bullshit');
                 songItem.innerHTML = playButtonTemplate;        
             }
         }
@@ -171,9 +175,9 @@ window.onload = function() {
 
         songRows[i].addEventListener('click', function(event) {
             // Event handler call
+            console.log(event.target);
             clickHandler(event.target);
         });
-
     }
 
     // Create array for albums
