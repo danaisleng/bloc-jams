@@ -3,6 +3,8 @@ var albumArt = document.getElementById('albumCover'),
     currentAlbum = null,
     currentlyPlayingSongNumber = null,
     currentSongFromAlbum = null,
+    currentSoundFile = null,
+    currentVolume = 80,
     $previousButton = $('.main-controls .previous'),
     $nextButton = $('.main-controls .next');
 
@@ -36,11 +38,19 @@ function createSongRow(songNumber, songName, songLength) {
             // Play to Pause 
             $(this).html(pauseButtonTemplate);
             setSong(songNumber);
+            currentSoundFile.play();
             updatePlayerBarSong();
         } else if (currentlyPlayingSongNumber === songNumber) {
             // Pause to Play
-            $(this).html(playButtonTemplate);
-            setSong(songNumber);
+            if (currentSoundFile.isPaused()) {
+                $(this).html(pauseButtonTemplate);
+                setSong(songNumber);
+                currentSoundFile.play();    
+            } else {
+                $(this).html(playButtonTemplate);
+                currentSoundFile.pause();
+            };
+            
             $('.main-controls .play-pause').html(playerBarPlayButton);
         }
 
@@ -71,8 +81,25 @@ function createSongRow(songNumber, songName, songLength) {
 };
 
 function setSong(songNumber) {
+    if (currentSoundFile) {
+        currentSoundFile.stop();
+    }
+
     currentlyPlayingSongNumber = parseInt(songNumber);
     currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+
+    currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+        formats: [ 'mp3' ],
+        preload: true
+    });
+
+    setVolume(currentVolume);
+};
+
+function setVolume(volume) {
+    if (currentSoundFile) {
+        currentSoundFile.setVolume(volume);
+    }
 };
 
 function getSongNumberCell(number) {
@@ -119,8 +146,9 @@ function nextSong() {
 
     var lastSongNumber = currentlyPlayingSongNumber;
 
-    currentlyPlayingSongNumber = currentSongIndex + 1;
-    currentSongFromAlbum = currentAlbum.songs[currentSongIndex]
+    setSong(currentSongIndex + 1);
+    currentSoundFile.play();
+
 
     updatePlayerBarSong();
 
@@ -137,16 +165,14 @@ function previousSong() {
 
     currentSongIndex--;
 
-    console.log(currentSongIndex);
-
     if (currentSongIndex < 0) {
         currentSongIndex = albumLength - 1;
     }
 
     var lastSongNumber = currentlyPlayingSongNumber;
 
-    currentlyPlayingSongNumber = currentSongIndex + 1;
-    currentSongFromAlbum = currentAlbum.songs[currentSongIndex]
+    setSong(currentSongIndex + 1);
+    currentSoundFile.play();
 
     updatePlayerBarSong();
 
@@ -170,7 +196,7 @@ function updatePlayerBarSong() {
 };
 
 $(document).ready(function() {
-    setCurrentAlbum(albumHoundmouth);
+    setCurrentAlbum(albumPicasso);
     $previousButton.click(previousSong);
     $nextButton.click(nextSong);
 
