@@ -6,6 +6,7 @@ var albumArt = document.getElementById('albumCover'),
     currentSoundFile = null,
     currentVolume = 80,
     $previousButton = $('.main-controls .previous'),
+    $playPauseButton = $('.main-controls .play-pause'),
     $nextButton = $('.main-controls .next');
 
 
@@ -50,8 +51,6 @@ function createSongRow(songNumber, songName, songLength) {
                 $(this).html(playButtonTemplate);
                 currentSoundFile.pause();
             };
-            
-            $('.main-controls .play-pause').html(playerBarPlayButton);
         }
 
         updatePlayerBarSong();
@@ -195,10 +194,25 @@ function updatePlayerBarSong() {
     $('.main-controls .play-pause').html(playerBarPauseButton);
 };
 
+function togglePlayFromPlayerBar() {
+    console.log(getSongNumberCell(currentlyPlayingSongNumber));
+
+    if (currentSoundFile.isPaused()) {
+        $(this).html(playerBarPauseButton);
+        currentSoundFile.play();    
+        getSongNumberCell(currentlyPlayingSongNumber).html(pauseButtonTemplate);
+    } else {
+        $(this).html(playerBarPlayButton);
+        currentSoundFile.pause();
+        getSongNumberCell(currentlyPlayingSongNumber).html(playButtonTemplate);
+    };
+}
+
 $(document).ready(function() {
     setCurrentAlbum(albumPicasso);
     $previousButton.click(previousSong);
     $nextButton.click(nextSong);
+    $playPauseButton.click(togglePlayFromPlayerBar);
 
     // Create array for albums
     // var albumArray = [albumPicasso, albumMarconi, albumHoundmouth],
